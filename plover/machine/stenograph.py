@@ -126,7 +126,7 @@ class Stenograph(ThreadedStenotypeBase):
         )
 
         while not self.finished.isSet():
-            sequence_number = (sequence_number + 1) % 225
+            sequence_number = (sequence_number + 1) % 255
             packet[2] = sequence_number
             for i in range(4):
                 packet[12 + i] = file_offset >> 8 * i & 255
@@ -138,7 +138,19 @@ class Stenograph(ThreadedStenotypeBase):
             else:
                 if data is not None and len(data) > 32:
                     steno = data[32:35]
-                    print(steno) # Need the callback here!
+                    print(steno)
+                    keys = []
+                    for i, b in enumerate(steno):
+                        map = STENO_KEY_CHART[i]
+                        b = b >> 2 # Get rid of 11
+                        for i in range(6):
+                            if (b >> i) & 1:
+                                key = map[-i + 5]
+                                if key:
+                                    keys.append(key)
+                    steno_keys = self.keymap.keys_to_actions(keys)
+                    if steno_keys:
+                        self._notify(steno_keys)
                     file_offset += len(data) - 32
 
     def stop_capture(self):
