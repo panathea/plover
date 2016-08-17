@@ -134,10 +134,12 @@ class Stenograph(ThreadedStenotypeBase):
                 self._endpoint_out.write(packet)
                 data = self._endpoint_in.read(128, 3000)
             except Exception as e:
+                print('Exception')
                 print(e.message)
             else:
                 if data is not None and len(data) > 32:
-                    steno = data[32:35]
+                    print(data)
+                    steno = data[33:37]
                     print(steno)
                     keys = []
                     for i, b in enumerate(steno):
