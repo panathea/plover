@@ -150,6 +150,7 @@ class Stenograph(ThreadedStenotypeBase):
                                 key = map[-i + 5]
                                 if key:
                                     keys.append(key)
+                    print(keys)
                     steno_keys = self.keymap.keys_to_actions(keys)
                     if steno_keys:
                         self._notify(steno_keys)
