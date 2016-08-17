@@ -132,10 +132,9 @@ class Stenograph(ThreadedStenotypeBase):
                 packet[12 + i] = file_offset >> 8 * i & 255
             try:
                 self._endpoint_out.write(packet)
-                data = self._endpoint_in.read(128, 3000)
+                data = self._endpoint_in.read(128, 3000, 100)
             except Exception as e:
-                print('Exception')
-                print(e.message)
+                print('Exception:', e)
             else:
                 if data is not None and len(data) > 32:
                     print(data)
