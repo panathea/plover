@@ -188,7 +188,21 @@ osx_standalone_python()
     --destination="$dest" \
     --without-pip \
     ;
-  run ln -s 'python3' "$py_framework_dir/Versions/Current/bin/python"
+
+  # Replace bin python with launcher python binary.
+  run rm -rf "$py_framework_dir/Versions/Current/bin/*"
+  py_binary="$py_framework_dir/Versions/Current/bin/python"
+  run mv "$py_framework_dir/Resources/Python.app/Contents/MacOS/Python" "$py_binary"
+  # Delete the launcher
+  run rm -rf "$py_framework_dir/Versions/Current/Resources"
+  # This allows notifications from our Python binary to identify as from Plover.
+  run /usr/libexec/PlistBuddy -c 'Add :CFBundleIdentifier string "org.openstenoproject.plover"' "$py_framework_dir/Versions/Current/bin/Info.plist"
+
+  # Update rpath and path to Python dylib for the launcher's new directory.
+  # Path to $dest/Python.framework from $dest/Python.framework/Versions/Current/bin/python
+  run install_name_tool -rpath "@executable_path/../../../../../../" "@executable_path/../../../" "$py_binary"
+
+  #run ln -s 'python3' "$py_binary"
   run rm -rf "$reloc_py_dir"
 }
 
