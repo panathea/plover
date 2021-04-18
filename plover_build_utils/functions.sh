@@ -191,7 +191,7 @@ osx_standalone_python()
 
   # Replace bin python with launcher python binary.
   run rm -rf "$py_framework_dir/Versions/Current/bin/*"
-  py_binary="$py_framework_dir/Versions/Current/bin/python"
+  py_binary="$py_framework_dir/Versions/Current/bin/python3"
   run mv "$py_framework_dir/Resources/Python.app/Contents/MacOS/Python" "$py_binary"
   # Delete the launcher
   run rm -rf "$py_framework_dir/Versions/Current/Resources"
@@ -202,7 +202,7 @@ osx_standalone_python()
   # Path to $dest/Python.framework from $dest/Python.framework/Versions/Current/bin/python
   run install_name_tool -rpath "@executable_path/../../../../../../" "@executable_path/../../../" "$py_binary"
 
-  run ln -s 'python' "${py_binary}3"
+  run ln -s 'python3' "$py_framework_dir/Versions/Current/bin/python"
   run rm -rf "$reloc_py_dir"
 }
 
