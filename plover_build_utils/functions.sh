@@ -202,7 +202,7 @@ osx_standalone_python()
   # Path to $dest/Python.framework from $dest/Python.framework/Versions/Current/bin/python
   run install_name_tool -rpath "@executable_path/../../../../../../" "@executable_path/../../../" "$py_binary"
 
-  #run ln -s 'python3' "$py_binary"
+  run ln -s 'python' "${py_binary}3"
   run rm -rf "$reloc_py_dir"
 }
 
